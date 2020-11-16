@@ -74,10 +74,7 @@ class KnightPathFinder
     #have we stepped on it before? (consider positions)
     #
 
-    attr_reader :root_node, :starting_pos
-
     def initialize(starting_pos)
-        @starting_pos = starting_pos
         @root_node = PolyTreeNode.new(starting_pos)
         @consider_positions = [starting_pos]
         
@@ -116,34 +113,26 @@ class KnightPathFinder
     end
 
     def build_move_tree
+        self.root = PolyTreeNode.new(starting_pos)
+        queue = [root]
 
-        # KnightPathFinder.root_node
-        # the plan: new node, starts our queue. inspect dequeue. see if dequeue is inside valid (line 114)
-        # if it is inside, it is one move away => shovel back into queue
-        # 
-        
-        new_moves = new_move_positions(@starting_pos)
-        # make a new node for each "move" and << that onto the end of the queue, do this until queue is empty
-        
-        until new_moves.empty?
+        while !queue.empty?
+            first_node = queue.shift
+            new_moves = new_move_positions(first_node.value)
+
             new_moves.each do |move|
-                new_node = PolyTreeNode.new(move)
-                new_moves << new_move_positions(new_node.value)
-
-            
-        
-
-
-        queue = new_move_positions(KnightPathFinder.starting_pos)
-        enqueue = queue.last    #back of line
-        dequeue = queue.first   #front of line
-
-        new_possible = new_move_positions(dequeue)
-        queue << new_possible
+                node = PolyTreeNode.new(move)
+                first_node.add_child(node)
+                queue << node
+            end
+        end
+    
     end
 
 
 end
+
+# SUCK IT
 
 
 knight1 = KnightPathFinder.new([0,0])
