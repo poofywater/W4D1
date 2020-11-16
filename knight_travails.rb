@@ -1,3 +1,5 @@
+require 'byebug'
+
 class PolyTreeNode
 
     attr_reader :parent, :value, :children
@@ -74,14 +76,18 @@ class KnightPathFinder
     #have we stepped on it before? (consider positions)
     #
 
+    attr_reader :starting_pos, :considered_positions, :root_node
+    # attr_accessor :root
+
     def initialize(starting_pos)
+        @starting_pos = starting_pos
         @root_node = PolyTreeNode.new(starting_pos)
-        @consider_positions = [starting_pos]
-        
+        @considered_positions = [starting_pos]
+        # @root = nil        
     end
 
 
-    def valid_moves(pos)
+    def self.valid_moves(pos)
         iterations = [[-2,1],[-1,2],[1,2],[2,1],[2,-1],[1,-2],[-1,-2],[-2,-1]]
         row, col = pos
       
@@ -104,17 +110,24 @@ class KnightPathFinder
     end
     
     def new_move_positions(pos)
+        # debugger
         valid = []
-        valid_moves(pos).select do |ele|
-            valid << ele if !@considered_positions.include?(ele)
-            @considered_positions << ele if !@considered_positions.include?(ele)
+        # debugger
+        if !KnightPathFinder.valid_moves(pos).nil?
+            # debugger
+            KnightPathFinder.valid_moves(pos).select do |ele|
+                # debugger
+                valid << ele if !considered_positions.include?(ele)
+                # debugger
+                considered_positions << ele if !considered_positions.include?(ele)
+            end
         end
         return valid        #return array of valid places that we haven't been to yet 
     end
 
     def build_move_tree
-        self.root = PolyTreeNode.new(starting_pos)
-        queue = [root]
+        # self.root_node = PolyTreeNode.new(starting_pos)
+        queue = [root_node]
 
         while !queue.empty?
             first_node = queue.shift
@@ -131,12 +144,10 @@ class KnightPathFinder
 
 
 end
-#Hello
-# SUCK IT
+
 
 
 knight1 = KnightPathFinder.new([0,0])
-knight2 = KnightPathFinder.new([8,8])
 p knight1.class.valid_moves([0,0])
-p knight2.class.valid_moves([8,8])
-p knight2.valid_moves([4,4])
+p knight1.build_move_tree
+p knight1.root_node
