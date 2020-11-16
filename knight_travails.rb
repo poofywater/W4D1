@@ -80,21 +80,12 @@ class KnightPathFinder
         
     end
 
-    # def self.valid_moves(pos) [1,2]
-    #     iterations = [[-2,1],[-1,2],[1,2],[2,1],[2,-1],[1,-2],[-1,-2],[-2,-1]]
-            
-    #     if !@grid.include?(pos)
-    #         return false
-    #     else
-    #         return true
-    #     end
-    # end
 
     def valid_moves(pos)
         iterations = [[-2,1],[-1,2],[1,2],[2,1],[2,-1],[1,-2],[-1,-2],[-2,-1]]
         row, col = pos
       
-        plsib = []
+        valid_pos = []
 
         iterations.each do |move|
           r, c = move
@@ -106,14 +97,26 @@ class KnightPathFinder
             valid << col + c
           end
         
-        plsib << valid if valid.length == 2
+        valid_pos << valid if valid.length == 2
         end
 
-        return plsib
+        return valid_pos
     end
     
+    def new_move_positions(pos)
+        new_moves = []
+
+        valid_moves(pos).select do |ele|
+            new_moves << !@considered_positions.include?(ele)
+        end
+
+        new_moves # this are the ones we 
+    end
+
+
+
+
     def build_move_tree
-        @consider_positions = [pos] #[[]]
 
     end
 
@@ -125,6 +128,6 @@ end
 
 knight1 = KnightPathFinder.new([0,0])
 knight2 = KnightPathFinder.new([8,8])
-p knight1.valid_moves([0,0])
-p knight2.valid_moves([8,8])
+p knight1.class.valid_moves([0,0])
+p knight2.class.valid_moves([8,8])
 p knight2.valid_moves([4,4])
