@@ -104,19 +104,22 @@ class KnightPathFinder
     end
     
     def new_move_positions(pos)
-        new_moves = []
-
+        valid = []
         valid_moves(pos).select do |ele|
-            new_moves << !@considered_positions.include?(ele)
+            valid << ele if !@considered_positions.include?(ele)
+            @considered_positions << ele if !@considered_positions.include?(ele)
         end
-
-        new_moves # this are the ones we 
+        return valid        #return array of valid places that we haven't been to yet 
     end
 
-
-
-
     def build_move_tree
+        queue = new_move_positions(KnightPathFinder.starting_pos)
+        enqueue = queue.last    #back of line
+        dequeue = queue.first   #front of line
+
+        new_possible = new_move_positions(dequeue)
+        queue << new_possible
+
 
     end
 
